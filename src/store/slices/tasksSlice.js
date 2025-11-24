@@ -9,7 +9,12 @@ const tasksSlice = createSlice({
   initialState,
   reducers: {
     createTask: (state, action) => {
-      state.push(action.payload);
+      state.tasks.push({
+        ...action.payload,
+        id: crypto.randomUUID(),
+        status: "backlog",
+        createdAt: new Date().toISOString(),
+      });
     },
   },
 });
