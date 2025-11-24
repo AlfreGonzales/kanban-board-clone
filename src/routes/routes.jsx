@@ -1,5 +1,5 @@
-import LoginPage from "../components/LoginPage";
-import MainPage from "../components/MainPage";
+import LoginPage from "../pages/LoginPage";
+import MainPage from "../pages/MainPage";
 
 export const routes = [
   {
