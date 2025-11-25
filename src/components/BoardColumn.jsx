@@ -1,8 +1,18 @@
+import { useDroppable } from "@dnd-kit/core";
 import { Card, Stack, Typography } from "@mui/material";
 
-export default function BoardColumn({ title, children }) {
+export default function BoardColumn({ id, title, children }) {
+  const { isOver, setNodeRef } = useDroppable({ id: id });
+
+  const style = {
+    background: isOver ? "green" : undefined,
+  };
+
   return (
-    <Card sx={{ width: "332px", p: "16px", minHeight: "100%" }}>
+    <Card
+      ref={setNodeRef}
+      sx={{ ...style, width: "332px", p: "16px", minHeight: "100%" }}
+    >
       <Typography sx={{ mb: "16px" }}>{title}</Typography>
       <Stack spacing={1}>{children}</Stack>
     </Card>

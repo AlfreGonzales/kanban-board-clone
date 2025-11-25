@@ -16,9 +16,15 @@ const tasksSlice = createSlice({
         createdAt: new Date().toISOString(),
       });
     },
+    updateTask: (state, action) => {
+      const index = state.tasks.findIndex(
+        (task) => task.id === action.payload.id
+      );
+      state.tasks[index].status = action.payload.status;
+    },
   },
 });
 
-export const { createTask } = tasksSlice.actions;
+export const { createTask, updateTask } = tasksSlice.actions;
 
 export default tasksSlice.reducer;
