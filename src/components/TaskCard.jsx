@@ -9,6 +9,7 @@ export default function TaskCard({
   code,
   assignee,
   isActive = false,
+  onClick,
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -25,11 +26,12 @@ export default function TaskCard({
   return (
     <Card
       ref={setNodeRef}
-      sx={{ ...style, width: "300px", p: "16px", cursor: "grab" }}
-      {...listeners}
-      {...attributes}
+      sx={{ ...style, width: "300px", p: "16px", cursor: "pointer" }}
+      onClick={onClick}
     >
-      <Typography>{title}</Typography>
+      <Typography sx={{ cursor: "grab" }} {...listeners} {...attributes}>
+        {title}
+      </Typography>
       <Stack
         direction="row"
         sx={{

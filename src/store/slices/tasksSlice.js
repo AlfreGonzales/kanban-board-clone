@@ -17,10 +17,10 @@ const tasksSlice = createSlice({
       });
     },
     updateTask: (state, action) => {
-      const index = state.tasks.findIndex(
-        (task) => task.id === action.payload.id
-      );
-      state.tasks[index].status = action.payload.status;
+      const { id, task } = action.payload;
+
+      const index = state.tasks.findIndex((task) => task.id === id);
+      state.tasks[index] = { ...state.tasks[index], ...task };
     },
   },
 });

@@ -14,8 +14,10 @@ export default function MainPage() {
   const [open, setOpen] = useState(false);
   const { tasks } = useSelector((state) => state.tasks);
   const [activeTask, setActiveTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const openCreateModal = () => {
+    setSelectedTask(null);
     setOpen(true);
   };
 
@@ -32,8 +34,13 @@ export default function MainPage() {
     const task = tasks.find((task) => task.id === active.id);
     if (task.status === over.id) return;
 
-    dispatch(updateTask({ id: active.id, status: over.id }));
+    dispatch(updateTask({ id: active.id, task: { status: over.id } }));
     setActiveTask(null);
+  };
+
+  const handleClick = (task) => {
+    setSelectedTask(task);
+    setOpen(true);
   };
 
   return (
@@ -55,6 +62,7 @@ export default function MainPage() {
                     title={task.title}
                     code={task.id.slice(0, 3).toUpperCase()}
                     assignee={getInitials(task.assignee)}
+                    onClick={() => handleClick(task)}
                   />
                 ))}
             </BoardColumn>
@@ -73,7 +81,12 @@ export default function MainPage() {
         </DragOverlay>
       </DndContext>
 
-      <TaskForm open={open} setOpen={setOpen} />
+      <TaskForm
+        open={open}
+        setOpen={setOpen}
+        selectedTask={selectedTask}
+        setSelectedTask={setSelectedTask}
+      />
     </>
   );
 }
