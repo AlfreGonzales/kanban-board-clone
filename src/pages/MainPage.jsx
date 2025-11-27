@@ -7,6 +7,7 @@ import { useState } from "react";
 import TaskForm from "../components/TaskForm";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { updateTask } from "../store/slices/tasksSlice";
+import { getInitials } from "../shared/getInitials";
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ export default function MainPage() {
                     id={task.id}
                     title={task.title}
                     code={task.id.slice(0, 3).toUpperCase()}
-                    assignee={getInitials(task.assignee)}
+                    assignee={getInitials(task.assignee.name)}
                     onClick={() => handleClick(task)}
                   />
                 ))}
@@ -74,7 +75,7 @@ export default function MainPage() {
             <TaskCard
               title={activeTask.title}
               code={activeTask.id.slice(0, 3).toUpperCase()}
-              assignee={getInitials(activeTask.assignee)}
+              assignee={getInitials(activeTask.assignee.name)}
               isActive
             />
           ) : null}
@@ -89,12 +90,4 @@ export default function MainPage() {
       />
     </>
   );
-}
-
-function getInitials(name) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((word) => word[0].toUpperCase())
-    .join("");
 }

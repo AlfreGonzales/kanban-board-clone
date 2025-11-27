@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Card,
   CardContent,
@@ -12,6 +13,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { createTask, updateTask } from "../store/slices/tasksSlice";
+import { getUsers } from "../services/userService";
+import { getInitials } from "../shared/getInitials";
 
 const style = {
   position: "absolute",
@@ -39,12 +42,20 @@ export default function TaskForm({
       ? {
           title: selectedTask.title,
           description: selectedTask.description,
-          assignee: selectedTask.assignee,
+          assignee: selectedTask.assignee.id,
         }
       : initialState
   );
   const { title, description, assignee } = form;
   const [errors, setErrors] = useState({});
+
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    getUsers()
+      .then((data) => setUserList(data))
+      .catch((error) => console.error("error loading users", error));
+  }, []);
 
   useEffect(() => {
     setForm(
@@ -52,7 +63,7 @@ export default function TaskForm({
         ? {
             title: selectedTask.title,
             description: selectedTask.description,
-            assignee: selectedTask.assignee,
+            assignee: selectedTask.assignee.id,
           }
         : initialState
     );
@@ -70,10 +81,15 @@ export default function TaskForm({
   const handleSave = () => {
     if (!validate()) return;
 
+    const { id, name } = userList.find((user) => user.id === form.assignee);
+    const assignee = { id, name };
+
     if (!selectedTask) {
-      dispatch(createTask(form));
+      dispatch(createTask({ ...form, assignee }));
     } else {
-      dispatch(updateTask({ id: selectedTask.id, task: form }));
+      dispatch(
+        updateTask({ id: selectedTask.id, task: { ...form, assignee } })
+      );
     }
     setOpen(false);
     setForm(initialState);
@@ -132,7 +148,21 @@ export default function TaskForm({
                 error={Boolean(errors.assignee)}
                 helperText={errors.assignee}
               >
-                <MenuItem value="value">label</MenuItem>
+                {userList.map((user) => (
+                  <MenuItem key={user.id} value={user.id}>
+                    <Avatar
+                      sx={{
+                        width: 24,
+                        height: 24,
+                        fontSize: "small",
+                        mr: "15px",
+                      }}
+                    >
+                      {getInitials(user.name)}
+                    </Avatar>
+                    {user.name}
+                  </MenuItem>
+                ))}
               </TextField>
               <Button
                 variant="outlined"
