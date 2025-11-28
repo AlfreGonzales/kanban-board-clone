@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchGetProfile, fetchLogin } from "../store/slices/authSlice";
+import { useAlert } from "../hooks/useAlert";
 
 const initialState = {
   email: "",
@@ -22,6 +23,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { showAlert } = useAlert();
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState(initialState);
   const { email, password } = form;
@@ -36,8 +38,11 @@ export default function LoginPage() {
       const token = await dispatch(fetchLogin(form)).unwrap();
       await dispatch(fetchGetProfile(token)).unwrap();
       navigate("/");
-    } catch (error) {
-      console.error(error);
+    } catch {
+      showAlert({
+        type: "error",
+        title: "Credenciales incorrectas",
+      });
     }
   };
 

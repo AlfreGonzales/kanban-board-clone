@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { createTask, updateTask } from "../store/slices/tasksSlice";
 import { getUsers } from "../services/userService";
 import { getInitials } from "../shared/getInitials";
+import { useAlert } from "../hooks/useAlert";
 
 const style = {
   position: "absolute",
@@ -48,6 +49,7 @@ export default function TaskForm({
   );
   const { title, description, assignee } = form;
   const [errors, setErrors] = useState({});
+  const { showAlert } = useAlert();
 
   const [userList, setUserList] = useState([]);
 
@@ -91,6 +93,10 @@ export default function TaskForm({
         updateTask({ id: selectedTask.id, task: { ...form, assignee } })
       );
     }
+    showAlert({
+      type: "success",
+      title: "Tarea guardada correctamente",
+    });
     setOpen(false);
     setForm(initialState);
   };

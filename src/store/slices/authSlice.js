@@ -25,6 +25,8 @@ export const fetchGetProfile = createAsyncThunk(
   }
 );
 
+const storageData = localStorage.getItem("auth");
+
 const initialState = {
   access_token: null,
   user: null,
@@ -34,7 +36,7 @@ const initialState = {
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: storageData ? JSON.parse(storageData) : initialState,
   extraReducers: (builder) => {
     builder
       .addCase(fetchLogin.pending, (state) => {
