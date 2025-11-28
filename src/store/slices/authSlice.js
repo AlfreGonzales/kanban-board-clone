@@ -15,9 +15,10 @@ export const fetchLogin = createAsyncThunk(
 
 export const fetchGetProfile = createAsyncThunk(
   "auth/fetchGetProfile",
-  async (token, { rejectWithValue }) => {
+  async ({ token, role }, { rejectWithValue }) => {
     try {
-      const res = await getProfile(token);
+      let res = await getProfile(token);
+      res.role = role;
       return res;
     } catch (error) {
       return rejectWithValue(error.message);

@@ -8,9 +8,12 @@ import TaskForm from "../components/TaskForm";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { updateTask } from "../store/slices/tasksSlice";
 import { getInitials } from "../shared/getInitials";
+import { useAlert } from "../hooks/useAlert";
 
 export default function MainPage() {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { showAlert } = useAlert();
 
   const [open, setOpen] = useState(false);
   const { tasks } = useSelector((state) => state.tasks);
@@ -34,6 +37,29 @@ export default function MainPage() {
 
     const task = tasks.find((task) => task.id === active.id);
     if (task.status === over.id) return;
+
+    const currentColumn = COLUMNS.find((col) => col.id === task.status);
+    const newColumn = COLUMNS.find((col) => col.id === over.id);
+
+    if (newColumn.order < currentColumn.order) {
+      showAlert({
+        type: "error",
+        title: "No puedes mover la tarea a una columna previa",
+      });
+      return;
+    } else if (newColumn.order - currentColumn.order > 1) {
+      showAlert({
+        type: "error",
+        title: "No puedes mover la tarea saltandote columnas",
+      });
+      return;
+    } else if (newColumn.authRole !== user.role) {
+      showAlert({
+        type: "error",
+        title: "No tienes permiso para mover esta tarea",
+      });
+      return;
+    }
 
     dispatch(updateTask({ id: active.id, task: { status: over.id } }));
     setActiveTask(null);

@@ -3,6 +3,7 @@ import {
   Button,
   IconButton,
   InputAdornment,
+  MenuItem,
   Stack,
   TextField,
 } from "@mui/material";
@@ -17,6 +18,7 @@ import { useAlert } from "../hooks/useAlert";
 const initialState = {
   email: "",
   password: "",
+  role: "dev",
 };
 
 export default function LoginPage() {
@@ -26,7 +28,7 @@ export default function LoginPage() {
   const { showAlert } = useAlert();
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState(initialState);
-  const { email, password } = form;
+  const { email, password, role } = form;
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -36,7 +38,7 @@ export default function LoginPage() {
   const handleClick = async () => {
     try {
       const token = await dispatch(fetchLogin(form)).unwrap();
-      await dispatch(fetchGetProfile(token)).unwrap();
+      await dispatch(fetchGetProfile({ token, role: form.role })).unwrap();
       navigate("/");
     } catch {
       showAlert({
@@ -84,6 +86,16 @@ export default function LoginPage() {
           }}
           onChange={handleChange}
         />
+        <TextField
+          name="role"
+          value={role}
+          label="Rol"
+          select
+          onChange={handleChange}
+        >
+          <MenuItem value="dev">Developer</MenuItem>
+          <MenuItem value="qa">QA</MenuItem>
+        </TextField>
         <Button variant="contained" onClick={handleClick}>
           INICIAR SESION
         </Button>
