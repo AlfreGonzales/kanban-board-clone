@@ -1,7 +1,8 @@
-import { Avatar, Card, Stack, Typography } from "@mui/material";
+import { Avatar, Card, Stack, Tooltip, Typography } from "@mui/material";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { useDraggable } from "@dnd-kit/core";
+import { getInitials } from "../shared/getInitials";
 
 export default function TaskCard({
   id,
@@ -46,9 +47,11 @@ export default function TaskCard({
 
         <Stack direction="row" spacing={1}>
           <DragHandleIcon color="secondary" />
-          <Avatar sx={{ width: 24, height: 24, fontSize: "small" }}>
-            {assignee}
-          </Avatar>
+          <Tooltip title={assignee}>
+            <Avatar sx={{ width: 24, height: 24, fontSize: "small" }}>
+              {getInitials(assignee)}
+            </Avatar>
+          </Tooltip>
         </Stack>
       </Stack>
     </Card>

@@ -1,14 +1,22 @@
-import { Button, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import BoardColumn from "../components/BoardColumn";
 import { COLUMNS } from "../constants/COLUMNS";
 import { useDispatch, useSelector } from "react-redux";
 import TaskCard from "../components/TaskCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskForm from "../components/TaskForm";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { updateTask } from "../store/slices/tasksSlice";
-import { getInitials } from "../shared/getInitials";
 import { useAlert } from "../hooks/useAlert";
+import { getInitials } from "../shared/getInitials";
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -19,6 +27,18 @@ export default function MainPage() {
   const { tasks } = useSelector((state) => state.tasks);
   const [activeTask, setActiveTask] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
+
+  const [filter, setFilter] = useState("");
+  const [debouncedFilter, setDebouncedFilter] = useState("");
+  const [selectedUser, setSelectedUser] = useState("all");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedFilter(filter);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [filter]);
 
   const openCreateModal = () => {
     setSelectedTask(null);
@@ -73,22 +93,63 @@ export default function MainPage() {
   return (
     <>
       <Typography variant="h4">Kanban Board</Typography>
-      <Button variant="contained" onClick={openCreateModal}>
-        CREATE TASK
-      </Button>
+      <Box sx={{ display: "flex", gap: "20px", mb: "20px" }}>
+        <TextField
+          label="Filter by task"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          sx={{ width: "200px" }}
+        />
+        <TextField
+          select
+          label="Filter by username"
+          value={selectedUser}
+          onChange={(e) => setSelectedUser(e.target.value)}
+          sx={{ width: "200px" }}
+        >
+          <MenuItem value="all">All</MenuItem>
+          {[...new Set(tasks.map((t) => t.assignee.name))].map((name) => (
+            <MenuItem key={name} value={name}>
+              <Avatar
+                sx={{
+                  width: 24,
+                  height: 24,
+                  fontSize: "small",
+                  mr: "15px",
+                }}
+              >
+                {getInitials(name)}
+              </Avatar>
+              {name}
+            </MenuItem>
+          ))}
+        </TextField>
+        <Button variant="contained" onClick={openCreateModal}>
+          CREATE TASK
+        </Button>
+      </Box>
+
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <Stack direction="row" spacing={2} sx={{ minHeight: "90%" }}>
           {COLUMNS.map((col) => (
             <BoardColumn key={col.id} id={col.id} title={col.title}>
               {tasks
                 .filter((t) => t.status === col.id)
+                .filter((t) =>
+                  t.title.toLowerCase().includes(debouncedFilter.toLowerCase())
+                )
+                .filter((t) =>
+                  selectedUser !== "all"
+                    ? t.assignee.name === selectedUser
+                    : true
+                )
                 .map((task) => (
                   <TaskCard
                     key={task.id}
                     id={task.id}
                     title={task.title}
                     code={task.id.slice(0, 3).toUpperCase()}
-                    assignee={getInitials(task.assignee.name)}
+                    assignee={task.assignee.name}
                     onClick={() => handleClick(task)}
                   />
                 ))}
@@ -101,7 +162,7 @@ export default function MainPage() {
             <TaskCard
               title={activeTask.title}
               code={activeTask.id.slice(0, 3).toUpperCase()}
-              assignee={getInitials(activeTask.assignee.name)}
+              assignee={activeTask.assignee.name}
               isActive
             />
           ) : null}

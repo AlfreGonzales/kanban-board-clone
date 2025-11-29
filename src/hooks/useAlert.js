@@ -6,7 +6,7 @@ const MySwal = withReactContent(Swal);
 export const useAlert = () => {
   const showAlert = ({ type, title }) => {
     MySwal.fire({
-      position: type === "success" ? "top-end" : "center",
+      position: "center",
       title,
       icon: type,
       showConfirmButton: type === "success" ? false : true,
