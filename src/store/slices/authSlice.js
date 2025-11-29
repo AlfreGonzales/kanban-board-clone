@@ -38,6 +38,11 @@ const initialState = {
 const authSlice = createSlice({
   name: "auth",
   initialState: storageData ? JSON.parse(storageData) : initialState,
+  reducers: {
+    logout: (state) => {
+      state.access_token = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLogin.pending, (state) => {
@@ -60,5 +65,7 @@ const authSlice = createSlice({
       });
   },
 });
+
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

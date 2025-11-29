@@ -77,7 +77,7 @@ export default function MainPage() {
         CREATE TASK
       </Button>
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <Stack direction="row" spacing={2} sx={{ minHeight: "100%" }}>
+        <Stack direction="row" spacing={2} sx={{ minHeight: "90%" }}>
           {COLUMNS.map((col) => (
             <BoardColumn key={col.id} id={col.id} title={col.title}>
               {tasks

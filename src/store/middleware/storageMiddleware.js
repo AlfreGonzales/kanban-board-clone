@@ -1,4 +1,4 @@
-import { fetchGetProfile, fetchLogin } from "../slices/authSlice";
+import { fetchGetProfile, fetchLogin, logout } from "../slices/authSlice";
 import { createTask, updateTask } from "../slices/tasksSlice";
 
 const storageMiddleware = (store) => (next) => async (action) => {
@@ -6,7 +6,8 @@ const storageMiddleware = (store) => (next) => async (action) => {
 
   if (
     fetchLogin.fulfilled.match(action) ||
-    fetchGetProfile.fulfilled.match(action)
+    fetchGetProfile.fulfilled.match(action) ||
+    logout.match(action)
   ) {
     localStorage.setItem("auth", JSON.stringify(store.getState().auth));
   }
