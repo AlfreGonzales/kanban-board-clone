@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CssBaseline,
   IconButton,
   InputAdornment,
   MenuItem,
@@ -58,6 +59,7 @@ export default function LoginPage() {
         alignItems: "center",
       }}
     >
+      <CssBaseline />
       <Stack
         spacing={5}
         sx={{ p: "50px", border: "1px solid", borderRadius: "20px" }}

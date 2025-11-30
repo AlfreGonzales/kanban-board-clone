@@ -4,6 +4,7 @@ const storageData = localStorage.getItem("tasks");
 
 const initialState = {
   tasks: [],
+  darkMode: false,
 };
 
 const tasksSlice = createSlice({
@@ -24,9 +25,12 @@ const tasksSlice = createSlice({
       const index = state.tasks.findIndex((task) => task.id === id);
       state.tasks[index] = { ...state.tasks[index], ...task };
     },
+    changeMode: (state) => {
+      state.darkMode = !state.darkMode;
+    },
   },
 });
 
-export const { createTask, updateTask } = tasksSlice.actions;
+export const { createTask, updateTask, changeMode } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

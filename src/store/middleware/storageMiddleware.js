@@ -1,5 +1,5 @@
 import { fetchGetProfile, fetchLogin, logout } from "../slices/authSlice";
-import { createTask, updateTask } from "../slices/tasksSlice";
+import { changeMode, createTask, updateTask } from "../slices/tasksSlice";
 
 const storageMiddleware = (store) => (next) => async (action) => {
   const result = next(action);
@@ -12,7 +12,11 @@ const storageMiddleware = (store) => (next) => async (action) => {
     localStorage.setItem("auth", JSON.stringify(store.getState().auth));
   }
 
-  if (createTask.match(action) || updateTask.match(action)) {
+  if (
+    createTask.match(action) ||
+    updateTask.match(action) ||
+    changeMode.match(action)
+  ) {
     localStorage.setItem("tasks", JSON.stringify(store.getState().tasks));
   }
 

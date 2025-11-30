@@ -5,7 +5,8 @@ export default function BoardColumn({ id, title, children }) {
   const { isOver, setNodeRef } = useDroppable({ id: id });
 
   const style = {
-    background: isOver ? "green" : undefined,
+    transform: isOver ? "scale(1.025)" : undefined,
+    transition: "transform 0.3s ease",
   };
 
   return (

@@ -27,7 +27,13 @@ export default function TaskCard({
   return (
     <Card
       ref={setNodeRef}
-      sx={{ ...style, width: "300px", p: "16px", cursor: "pointer" }}
+      sx={{
+        ...style,
+        width: "300px",
+        p: "16px",
+        cursor: "pointer",
+        backgroundImage: "none",
+      }}
       onClick={onClick}
     >
       <Typography sx={{ cursor: "grab" }} {...listeners} {...attributes}>
