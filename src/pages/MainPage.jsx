@@ -105,7 +105,31 @@ export default function MainPage() {
           label="Filter by username"
           value={selectedUser}
           onChange={(e) => setSelectedUser(e.target.value)}
-          sx={{ width: "200px" }}
+          sx={{ minWidth: "200px" }}
+          slotProps={{
+            select: {
+              renderValue: (selected) => {
+                if (selected === "all") return "All";
+
+                return (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Avatar
+                      sx={{
+                        width: 24,
+                        height: 24,
+                        fontSize: "small",
+                        mr: 1.5,
+                        bgcolor: "primary.main",
+                      }}
+                    >
+                      {getInitials(selected)}
+                    </Avatar>
+                    {selected}
+                  </Box>
+                );
+              },
+            },
+          }}
         >
           <MenuItem value="all">All</MenuItem>
           {[...new Set(tasks.map((t) => t.assignee.name))].map((name) => (
@@ -116,6 +140,7 @@ export default function MainPage() {
                   height: 24,
                   fontSize: "small",
                   mr: "15px",
+                  bgcolor: "primary.main",
                 }}
               >
                 {getInitials(name)}

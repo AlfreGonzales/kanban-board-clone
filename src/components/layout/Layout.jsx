@@ -80,9 +80,9 @@ export default function Layout() {
       <Drawer
         variant="permanent"
         sx={{
-          width: "250px",
+          width: "240px",
           [`& .MuiDrawer-paper`]: {
-            width: "250px",
+            width: "240px",
             boxSizing: "border-box",
           },
         }}

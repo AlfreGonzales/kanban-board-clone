@@ -12,7 +12,7 @@ export default function BoardColumn({ id, title, children }) {
   return (
     <Card
       ref={setNodeRef}
-      sx={{ ...style, width: "332px", p: "16px", minHeight: "100%" }}
+      sx={{ ...style, width: "282px", p: "16px", minHeight: "100%" }}
     >
       <Typography sx={{ mb: "16px" }}>{title}</Typography>
       <Stack spacing={1}>{children}</Stack>

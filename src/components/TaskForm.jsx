@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   Card,
   CardContent,
@@ -153,6 +154,31 @@ export default function TaskForm({
                 onChange={handleChange}
                 error={Boolean(errors.assignee)}
                 helperText={errors.assignee}
+                slotProps={{
+                  select: {
+                    renderValue: (selected) => {
+                      const user = userList.find((u) => u.id === selected);
+                      if (!user) return "";
+
+                      return (
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Avatar
+                            sx={{
+                              width: 24,
+                              height: 24,
+                              fontSize: "small",
+                              mr: 1.5,
+                              bgcolor: "primary.main",
+                            }}
+                          >
+                            {getInitials(user.name)}
+                          </Avatar>
+                          {user.name}
+                        </Box>
+                      );
+                    },
+                  },
+                }}
               >
                 {userList.map((user) => (
                   <MenuItem key={user.id} value={user.id}>
@@ -161,7 +187,8 @@ export default function TaskForm({
                         width: 24,
                         height: 24,
                         fontSize: "small",
-                        mr: "15px",
+                        mr: 1.5,
+                        bgcolor: "primary.main",
                       }}
                     >
                       {getInitials(user.name)}

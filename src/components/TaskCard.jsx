@@ -29,7 +29,7 @@ export default function TaskCard({
       ref={setNodeRef}
       sx={{
         ...style,
-        width: "300px",
+        width: "250px",
         p: "16px",
         cursor: "pointer",
         backgroundImage: "none",
@@ -54,7 +54,14 @@ export default function TaskCard({
         <Stack direction="row" spacing={1}>
           <DragHandleIcon color="secondary" />
           <Tooltip title={assignee}>
-            <Avatar sx={{ width: 24, height: 24, fontSize: "small" }}>
+            <Avatar
+              sx={{
+                width: 24,
+                height: 24,
+                fontSize: "small",
+                bgcolor: "primary.main",
+              }}
+            >
               {getInitials(assignee)}
             </Avatar>
           </Tooltip>
