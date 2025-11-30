@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { tasksData } from "../../constants/tasksData";
 
 const storageData = localStorage.getItem("tasks");
 
 const initialState = {
-  tasks: [],
+  tasks: tasksData,
   darkMode: false,
 };
 
